@@ -1,3 +1,4 @@
 backend/env/
 backend/project/project/__pycache__/
 backend/project/app/migrations/
+backend/project/app/__pycache__/
