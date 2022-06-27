@@ -1,40 +1,42 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-
-from .models import Client, Order, Product
+from .models import Order, Product
 
 import json
 import requests
 
 # Create your views here.
-
+# oooooooooooooooooooooooooooooooooooooooooooooooooooo
 def retrieveProductsFromApi(request):
     Product.objects.all().delete()
     responseFromApi = requests.get("https://api.storerestapi.com/products")
     json = responseFromApi.json()
-    for x in json["data"]:
-        # print(x["_id"])
-        product = Product(api_key=x["_id"])
-        product.save()
-    response = {"info":"all elements in Product table were deleted. Updated with information retrieved from api."}
-    return JsonResponse(response)
 
-def param(request,slug):
-    # Order.objects.filter(pk=myRequest["key"]).update(first_name=myRequest["updatedName"])
+    for x in json["data"]:
+        product = Product(api_key=x["_id"], product_name=x["title"])
+        product.save()
+    response = {"info":"All elements in Product table were deleted. Updated with information retrieved from api."}
+    return JsonResponse(response)
+# oooooooooooooooooooooooooooooooooooooooooooooooooooo
+def param(request,str):
+    products = list(Product.objects.all())
+    productsFil = []
+    for product in products:
+        if(str in product.product_name):
+            productsFil.append(product.api_key)
     myResponse = {
         "info": "param endopoint response.",
-        "product":slug
+        "product":productsFil
         }
-    return JsonResponse(myResponse, safe=False)
-
+    return JsonResponse(myResponse)
+# oooooooooooooooooooooooooooooooooooooooooooooooooooo
 def dates(request):
     myResponse = {
         "info": "param endopoint response.",
         }
-    return JsonResponse(myResponse, safe=False)
-
+    return JsonResponse(myResponse)
+# oooooooooooooooooooooooooooooooooooooooooooooooooooo
 @csrf_exempt
 def productbought(request):
     myResponse = dict()
@@ -56,7 +58,7 @@ def productbought(request):
             "info": "Bad method. This API only work with get method.",
         }
     return JsonResponse(myResponse, safe=False)
-    
+# oooooooooooooooooooooooooooooooooooooooooooooooooooo
 @csrf_exempt
 def order(request):
     myResponse = dict()

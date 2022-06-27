@@ -3,9 +3,10 @@ from .models import Client, Order, Product
 
 import datetime
 # Create your tests here.
-from unittest import skip
+from unittest import skipIf
 
 class myTest(TestCase):
+    @skipIf(True, "I don't want to run this test yet")
     def test_one(self):
         product1 = Product(product_name="milk")
         product2 = Product(product_name="rice")
@@ -29,4 +30,14 @@ class myTest(TestCase):
         # print(Product.objects.all())
         self.assertEqual("a","a")
 
+    @skipIf(True, "Test if date atribute of Order model is working properlly")
+    def test_two(self):
+        myDate = datetime.date(2022,1,1)
+        order = Order(date=myDate)
+        self.assertEqual(myDate,order.date)
+
+
+    @skipIf(False, "")
+    def test_three(self):
+        pass
 

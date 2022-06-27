@@ -24,6 +24,7 @@ class Order(models.Model):
     product = models.ManyToManyField(Product)
 
 
+
 '''
 
 +-------+          +-------+          +-------+
